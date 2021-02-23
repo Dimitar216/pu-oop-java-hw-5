@@ -5,12 +5,13 @@ import java.awt.*;
 public class Pixel {
     private final int row;
     private final int col;
-    private final Color color;
+    private Color color;
+    private int hiddenColorID;
 
     public Pixel(int row, int col,Color color){
         this.row          = row;
         this.col          = col;
-        this.color = color;
+        this.color        = color;
     }
 
     public void render(Graphics g) {
@@ -21,5 +22,17 @@ public class Pixel {
 
         g.setColor(this.color);
         g.fillRect(tileX, tileY, widthOfTile, heightOfTile);
+    }
+
+    public int getHiddenColorID() {
+        return hiddenColorID;
+    }
+
+    public void setHiddenColorID(int hiddenColorID) {
+        this.hiddenColorID = hiddenColorID;
+    }
+
+    public void setColor(Color color) {
+        this.color = color;
     }
 }
