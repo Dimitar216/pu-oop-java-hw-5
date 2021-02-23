@@ -7,6 +7,7 @@ import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.Random;
+import java.util.concurrent.ThreadLocalRandom;
 
 public class GameBoard extends JFrame implements MouseListener {
 
@@ -24,8 +25,8 @@ public class GameBoard extends JFrame implements MouseListener {
     public void paint(Graphics g){
         for(int row = 0; row < 64;row++){
             for(int col = 0; col < 64;col++){
-                Pixel pixel = new Pixel(row,col,Color.BLUE);
-                pixel.render(g);
+                int random = ThreadLocalRandom.current().nextInt(1,4);
+                pixelColorSelector(g,random,row,col);
             }
         }
     }
@@ -53,7 +54,7 @@ public class GameBoard extends JFrame implements MouseListener {
     public void mouseExited(MouseEvent e) {
 
     }
-    public String randomStringGen() {
+    private String randomStringGen() {
 
         int leftLimit = 97;
         int rightLimit = 122;
@@ -68,5 +69,17 @@ public class GameBoard extends JFrame implements MouseListener {
         String generatedString = buffer.toString();
 
         return generatedString;
+    }
+    private void pixelColorSelector(Graphics g,int randomNumber,int row,int col){
+        if(randomNumber == 1){
+            Pixel pixel = new Pixel(row,col,Color.BLUE);
+            pixel.render(g);
+        } else if(randomNumber == 2){
+            Pixel pixel = new Pixel(row,col,Color.GREEN);
+            pixel.render(g);
+        } else if(randomNumber == 3){
+            Pixel pixel = new Pixel(row,col,Color.RED);
+            pixel.render(g);
+        }
     }
 }

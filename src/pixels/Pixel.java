@@ -1,13 +1,10 @@
 package pixels;
 
 import java.awt.*;
-import java.awt.geom.Line2D;
 
 public class Pixel {
-    private int row;
-    private int col;
-    private final int widthOfTile = 10;
-    private final int heightOfTile = 10;
+    private final int row;
+    private final int col;
     private final Color color;
 
     public Pixel(int row, int col,Color color){
@@ -17,10 +14,12 @@ public class Pixel {
     }
 
     public void render(Graphics g) {
-        int tileX = (this.col * this.widthOfTile);
-        int tileY = (this.row * this.heightOfTile);
+        int widthOfTile = 10;
+        int tileX = (this.col * widthOfTile);
+        int heightOfTile = 10;
+        int tileY = (this.row * heightOfTile);
 
         g.setColor(this.color);
-        g.fillRect(tileX, tileY, this.widthOfTile, this.heightOfTile);
+        g.fillRect(tileX, tileY, widthOfTile, heightOfTile);
     }
 }
