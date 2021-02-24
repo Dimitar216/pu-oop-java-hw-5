@@ -12,14 +12,16 @@ import java.util.concurrent.ThreadLocalRandom;
 
 public class GameBoard extends JFrame implements MouseListener {
 
-    private final String title = randomStringGen();
     private final Pixel[][] pixelCollection = new Pixel[64][64];
     private Pixel selectedPixel;
+    private int deadPixelsCount;
+    private int totalClicks;
 
     public GameBoard(){
         pixelSetUp();
         this.setDefaultCloseOperation(EXIT_ON_CLOSE);
         this.setSize(800, 800);
+        String title = randomStringGen("ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890",10);
         this.setTitle(title);
         this.setVisible(true);
         this.addMouseListener(this);
@@ -39,15 +41,18 @@ public class GameBoard extends JFrame implements MouseListener {
         int row = this.getBoardCoordinates(e.getY());
         int col = this.getBoardCoordinates(e.getX());
         if(row<=64 && col<=64){
-
+                totalClicks++;
                 this.selectedPixel = this.getBoardPixel(row, col);
-                if(this.selectedPixel.getHiddenColorID() == 1){
-                    this.pixelCollection[row][col].setColor(Color.BLUE);
-                } else if(this.selectedPixel.getHiddenColorID() == 2 ){
-                    this.pixelCollection[row][col].setColor(Color.GREEN);
-                } else if(this.selectedPixel.getHiddenColorID() == 3 ){
-                    this.pixelCollection[row][col].setColor(Color.RED);
+                if (this.selectedPixel.getHiddenColorID() == 2) {
+                    if(e.getClickCount()== 3) {
+                        this.pixelCollection[row][col].setColor(Color.BLACK);
+                        deadPixelsCount++;
+                    }
+                } else if (this.selectedPixel.getHiddenColorID() == 3) {
+                    this.pixelCollection[row][col].setColor(Color.BLACK);
+                    deadPixelsCount++;
                 }
+                productDisplayQualityChecker();
                 this.repaint();
 
         } else {
@@ -74,34 +79,30 @@ public class GameBoard extends JFrame implements MouseListener {
     public void mouseExited(MouseEvent e) {
 
     }
-    private String randomStringGen() {
-
-        int leftLimit = 97;
-        int rightLimit = 122;
-        int targetStringLength = 10;
+    public static String randomStringGen(String candidateChars, int length) {
+        StringBuilder sb = new StringBuilder();
         Random random = new Random();
-        StringBuilder buffer = new StringBuilder(targetStringLength);
-        for (int i = 0; i < targetStringLength; i++) {
-            int randomLimitedInt = leftLimit + (int)
-                    (random.nextFloat() * (rightLimit - leftLimit + 1));
-            buffer.append((char) randomLimitedInt);
+        for (int i = 0; i < length; i++) {
+            sb.append(candidateChars.charAt(random.nextInt(candidateChars
+                    .length())));
         }
-        String generatedString = buffer.toString();
 
-        return generatedString;
+        return sb.toString();
     }
     private void pixelColorSelector(int randomNumber,int row,int col){
-        Pixel pixel = new Pixel(row,col,Color.BLACK);
-
         if(randomNumber == 1){
+            Pixel pixel = new Pixel(row,col,Color.BLUE);
             pixel.setHiddenColorID(1);
+            this.pixelCollection[row][col] = pixel;
         } else if(randomNumber == 2){
+            Pixel pixel = new Pixel(row,col,Color.GREEN);
             pixel.setHiddenColorID(2);
+            this.pixelCollection[row][col] = pixel;
         } else if(randomNumber == 3){
+            Pixel pixel = new Pixel(row,col,Color.RED);
             pixel.setHiddenColorID(3);
+            this.pixelCollection[row][col] = pixel;
         }
-
-        this.pixelCollection[row][col] = pixel;
     }
 
     private int getBoardCoordinates(int coordinates){
@@ -116,6 +117,15 @@ public class GameBoard extends JFrame implements MouseListener {
             for(int col = 0; col < 64;col++){
                 int random = ThreadLocalRandom.current().nextInt(1,4);
                 pixelColorSelector(random,row,col);
+            }
+        }
+    }
+    private void productDisplayQualityChecker() {
+        if(totalClicks >= 4096) {
+            if (deadPixelsCount > 2048) {
+                Modal.render(this, "Warning!", "Product is with a bad display!");
+            } else {
+                Modal.render(this, "Good!", "The product's display meets the requirements");
             }
         }
     }
