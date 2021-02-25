@@ -19,6 +19,9 @@ public class GameBoard extends JFrame implements MouseListener {
     private int deadPixelsCount;
     String title = randomStringGen("ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890",10);
 
+    /**
+     * Game board constructor
+     */
     public GameBoard(){
         pixelSetUp();
         this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
@@ -33,6 +36,10 @@ public class GameBoard extends JFrame implements MouseListener {
         this.addMouseListener(this);
     }
 
+    /**
+     * paint method
+     * @param g graphics component
+     */
     @Override
     public void paint(Graphics g){
         for(int row = 0; row < 64;row++){
@@ -42,6 +49,11 @@ public class GameBoard extends JFrame implements MouseListener {
             }
         }
     }
+
+    /**
+     * Method which reveals a pixel when clicked if it is damaged or not.
+     * @param e action event listener
+     */
     @Override
     public void mouseClicked(MouseEvent e) {
         int row = this.getBoardCoordinates(e.getY());
@@ -83,6 +95,13 @@ public class GameBoard extends JFrame implements MouseListener {
     public void mouseExited(MouseEvent e) {
 
     }
+
+    /**
+     * Method which generates random strings.
+     * @param candidateChars which symbols to include
+     * @param length the length of the randomly generated string
+     * @return
+     */
     public static String randomStringGen(String candidateChars, int length) {
         StringBuilder sb = new StringBuilder();
         Random random = new Random();
@@ -93,6 +112,13 @@ public class GameBoard extends JFrame implements MouseListener {
 
         return sb.toString();
     }
+
+    /**
+     * Method which sets the color of the pixel.
+     * @param randomNumber random number
+     * @param row row of pixel
+     * @param col col of pixel.
+     */
     private void pixelColorSelector(int randomNumber,int row,int col){
         if(randomNumber == 1){
             Pixel pixel = new Pixel(row,col,Color.BLUE);
@@ -109,13 +135,28 @@ public class GameBoard extends JFrame implements MouseListener {
         }
     }
 
+    /**
+     * Method which gets the row/col of a pixel.
+     * @param coordinates coordinates of the pixel.
+     * @return row/col
+     */
     private int getBoardCoordinates(int coordinates){
         return  coordinates/10;
     }
 
+    /**
+     * Gets board object of the pixel.
+     * @param row row of the pixel.
+     * @param col col of the pixel.
+     * @return the pixel.
+     */
     private Pixel getBoardPixel(int row, int col){
         return this.pixelCollection[row][col];
     }
+
+    /**
+     * Method that sets up pixel's color randomly.
+     */
     private void pixelSetUp(){
         for(int row = 0; row < 64;row++){
             for(int col = 0; col < 64;col++){
