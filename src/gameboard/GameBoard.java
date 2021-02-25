@@ -17,18 +17,17 @@ public class GameBoard extends JFrame implements MouseListener {
     private final Pixel[][] pixelCollection = new Pixel[64][64];
     private Pixel selectedPixel;
     private int deadPixelsCount;
-    private int totalClicks;
+    String title = randomStringGen("ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890",10);
 
     public GameBoard(){
         pixelSetUp();
         this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         this.addWindowListener(new WindowAdapter() {
             public void windowClosing(WindowEvent evt) {
-                Main.onExit();
+                Main.onExit(deadPixelsCount,title);
             }
         });
         this.setSize(800, 800);
-        String title = randomStringGen("ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890",10);
         this.setTitle(title);
         this.setVisible(true);
         this.addMouseListener(this);
@@ -48,7 +47,6 @@ public class GameBoard extends JFrame implements MouseListener {
         int row = this.getBoardCoordinates(e.getY());
         int col = this.getBoardCoordinates(e.getX());
         if(row<=64 && col<=64){
-                totalClicks++;
                 this.selectedPixel = this.getBoardPixel(row, col);
                 if (this.selectedPixel.getHiddenColorID() == 2) {
                     if(e.getClickCount()== 3) {
@@ -59,7 +57,6 @@ public class GameBoard extends JFrame implements MouseListener {
                     this.pixelCollection[row][col].setColor(Color.BLACK);
                     deadPixelsCount++;
                 }
-                productDisplayQualityChecker();
                 this.repaint();
 
         } else {
@@ -127,13 +124,5 @@ public class GameBoard extends JFrame implements MouseListener {
             }
         }
     }
-    private void productDisplayQualityChecker() {
-        if(totalClicks >= 4096) {
-            if (deadPixelsCount > 2048) {
-                Modal.render(this, "Warning!", "Product is with a bad display!");
-            } else {
-                Modal.render(this, "Good!", "The product's display meets the requirements");
-            }
-        }
-    }
+
 }

@@ -7,7 +7,6 @@ public class Pixel {
     private final int col;
     private Color color;
     private int hiddenColorID;
-    public int totalPhonesChecked;
 
     public Pixel(int row, int col,Color color){
         this.row          = row;
