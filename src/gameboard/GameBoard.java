@@ -7,6 +7,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;
 
@@ -19,7 +21,12 @@ public class GameBoard extends JFrame implements MouseListener {
 
     public GameBoard(){
         pixelSetUp();
-        this.setDefaultCloseOperation(EXIT_ON_CLOSE);
+        this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+        this.addWindowListener(new WindowAdapter() {
+            public void windowClosing(WindowEvent evt) {
+                Main.onExit();
+            }
+        });
         this.setSize(800, 800);
         String title = randomStringGen("ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890",10);
         this.setTitle(title);
